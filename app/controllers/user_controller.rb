@@ -1,9 +1,9 @@
 class UserController < ApplicationController
   skip_before_action :verify_authenticity_token
-
+  attr_accessor :users
   def index
-    user = User.all
-    render :json => user
+    users = User.all
+    render :json => users
   end
 
   def get
@@ -16,12 +16,12 @@ class UserController < ApplicationController
 
   def create
     permitted = params.permit(:name, :phone_num)
-    p params
     user = User.create(permitted)
       render :json => user
   end
 
   def delete
+    permitted = params.permit(:id)
     user = User.find(params[:id])
     user.destroy if user
     render :json => user
