@@ -1,37 +1,29 @@
 class UserController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-  def get
-    user = User.find(params[:id])
+  def index
+    user = User.all
     render :json => user
-    rescue ActiveRecord::RecordNotFound
-      render status:404, json: {message: 'not found'}
   end
 
-  def get_by_phone_num
-    phone_num = params[:phone_num]
-    users = User.find_by_phone_num(phone_num)
-    if users
-      render :json => users
-    else
-      render status:404, json: {message: 'not found'}
+  def get
+    begin
+      user = User.find(params[:id])
+      render :json => user
+    rescue ActiveRecord::RecordNotFound
     end
   end
 
   def create
+    permitted = params.permit(:name, :phone_num)
     p params
-    is_created = User.create(name:params[:name], phone_num: params[:phone_num])
-    p is_created
-    if is_created
-      render :json => { message: 'User created!'}
-    else
-      render :json => { message: 'Unable to create user'}
-    end
+    user = User.create(permitted)
+      render :json => user
   end
 
   def delete
-    records = User.find_by_phone_num(params[:phone_num])
-    records.destroy if records
-    render :json => { message: 'User deleted successfully'}
+    user = User.find(params[:id])
+    user.destroy if user
+    render :json => user
   end
 end

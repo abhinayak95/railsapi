@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   get '/users/:id' => 'user#get'
-  get '/users' => 'user#get_by_phone_num'
+  get '/users' => 'user#index'
   post '/users' => 'user#create'
   delete '/users' => 'user#delete'
   # put '/' =>
