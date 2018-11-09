@@ -1,12 +1,20 @@
 class UserController < ApplicationController
   skip_before_action :verify_authenticity_token
+
+  def get
+    user = User.find(params[:id])
+    render :json => user
+    rescue ActiveRecord::RecordNotFound
+      render status:404, json: {message: 'not found'}
+  end
+
   def get_by_phone_num
     phone_num = params[:phone_num]
     users = User.find_by_phone_num(phone_num)
     if users
       render :json => users
     else
-      render :json => { message: 'not found'}
+      render status:404, json: {message: 'not found'}
     end
   end
 
