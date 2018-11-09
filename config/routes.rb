@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get '/users/:id' => 'user#get'
   get '/users' => 'user#get_by_phone_num'
-  post '/users/new' => 'user#create'
+  post '/users' => 'user#create'
   delete '/users' => 'user#delete'
   # put '/' =>
 
