@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   get 'welcome/index'
 
-  get '/users/:id' => 'user#get'
   get '/users' => 'user#index'
+  get '/users/:id' => 'user#get'
   post '/users' => 'user#create'
   delete '/users' => 'user#delete'
   # put '/' =>
