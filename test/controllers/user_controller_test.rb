@@ -36,10 +36,47 @@ class UserControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should be able to delete the user with an id" do
-      delete "/users", params: {
-        id: 2
-      }
-      json_response = JSON.parse(response.body)
-      assert_equal 'test2', json_response["name"]
+    delete "/users", params: {
+      id: 2
+    }
+    json_response = JSON.parse(response.body)
+    assert_equal 'test2', json_response["name"]
   end
+
+  test "should get a false status when phone_num length is less than 10" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: 1
+    }
+    json_response = JSON.parse(response.body)
+    assert_equal false, json_response
+  end
+
+  test "should get a false status when phone_num length is greater than 10" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: 12345678901
+    }
+    json_response = JSON.parse(response.body)
+    assert_equal false, json_response
+  end
+
+  test "should get a false status when phone_num length is 10, but is not a complete numberal" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: '123456789a'
+    }
+    json_response = JSON.parse(response.body)
+    assert_equal false, json_response
+  end
+
+  test "should get a true status, ie update the record only when phone_num length is 10" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: '1234567890'
+    }
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response
+  end
+
 end

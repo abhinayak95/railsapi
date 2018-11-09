@@ -17,6 +17,13 @@ class UserController < ApplicationController
       render :json => user
   end
 
+  def update
+    permitted = params.permit(:name, :phone_num)
+    user = User.find(params[:id])
+    user = user.update(permitted)
+    render :json => user
+  end
+
   def delete
       permitted = params.permit(:id)
       user = User.find(params[:id])
