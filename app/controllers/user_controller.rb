@@ -11,6 +11,7 @@ class UserController < ApplicationController
       user = User.find(params[:id])
       render :json => user
     rescue ActiveRecord::RecordNotFound
+      render :json => []
     end
   end
 
@@ -21,9 +22,13 @@ class UserController < ApplicationController
   end
 
   def delete
-    permitted = params.permit(:id)
-    user = User.find(params[:id])
-    user.destroy if user
-    render :json => user
+    begin
+      permitted = params.permit(:id)
+      user = User.find(params[:id])
+      user.destroy if user
+      render :json => user
+    rescue ActiveRecord::RecordNotFound
+      render :json => []
+    end
   end
 end
