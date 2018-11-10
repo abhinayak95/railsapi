@@ -14,14 +14,21 @@ class UserController < ApplicationController
   def create
     permitted = params.permit(:name, :phone_num)
     user = User.create(permitted)
+    if user.id
       render :json => user
+    else
+      render status:422, json: user.errors
+    end
   end
 
   def update
     permitted = params.permit(:name, :phone_num)
     user = User.find(params[:id])
-    user = user.update(permitted)
-    render :json => user
+    if user.update(permitted)
+      render :json => user
+    else
+      render status:422, json: user.errors
+    end
   end
 
   def delete

@@ -49,7 +49,7 @@ class UserControllerTest < ActionDispatch::IntegrationTest
       phone_num: 1
     }
     json_response = JSON.parse(response.body)
-    assert_equal false, json_response
+    assert_response 422
   end
 
   test "should get a false status when phone_num length is greater than 10" do
@@ -58,7 +58,7 @@ class UserControllerTest < ActionDispatch::IntegrationTest
       phone_num: 12345678901
     }
     json_response = JSON.parse(response.body)
-    assert_equal false, json_response
+    assert_response 422
   end
 
   test "should get a false status when phone_num length is 10, but is not a complete numberal" do
@@ -67,7 +67,7 @@ class UserControllerTest < ActionDispatch::IntegrationTest
       phone_num: '123456789a'
     }
     json_response = JSON.parse(response.body)
-    assert_equal false, json_response
+    assert_response 422
   end
 
   test "should get a true status, ie update the record only when phone_num length is 10" do
@@ -76,7 +76,32 @@ class UserControllerTest < ActionDispatch::IntegrationTest
       phone_num: '1234567890'
     }
     json_response = JSON.parse(response.body)
-    assert_equal true, json_response
+    assert_response 200
   end
 
+###
+  test "should get a status code of 422 when phone_num length is 10, but is not a complete numberal" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: '123456789a'
+    }
+    assert_response 422
+  end
+
+  test "should get a status code of 422 when phone_num length is less than 10" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: 1
+    }
+    assert_response 422
+  end
+
+  test "should get a status code of 422 when phone_num length is greater than 10" do
+    put "/users/1", params: {
+      name: 'test',
+      phone_num: 12345678901
+    }
+    assert_response 422
+  end
+###
 end
